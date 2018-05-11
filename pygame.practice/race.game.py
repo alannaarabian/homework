@@ -9,6 +9,8 @@ display_height = 600
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
+green = (0, 150, 0)
+bright_green = (0, 255, 0)
 
 car_width = 73
 
@@ -54,6 +56,35 @@ def things_dodged(count):
     text = font.render("Dodged: "+str(count), True, black)
     gameDisplay.blit(text,(0,0))
 
+
+def game_intro():
+    intro = True
+
+    while intro:
+        for event in pygame.event.get():
+            print(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        gameDisplay.fill(white)
+        largeText = pygame.font.Font('freesansbold.ttf', 115)
+        TextSurf, TextRect = text_objects("A bit Racey", largeText)
+        TextRect.center = ((display_width / 2), (display_height / 2))
+        gameDisplay.blit(TextSurf, TextRect)
+
+        mouse = pygame.mouse.get_pos()
+
+        #print(mouse)
+
+        if 150+100 > mouse[0] > 150 and 450+50 > mouse[1] > 450:
+            pygame.draw.rect(gameDisplay, bright_green,(150,450,100,50))
+        else:
+            pygame.draw.rect(gameDisplay, green,(150,450,100,50))
+        pygame.draw.rect(gameDisplay, red,(550,450,100,50))
+        pygame.display.update()
+        clock.tick(15)
+
 def game_loop():
     x = (display_width * 0.45)
     y = (display_height * 0.8)
@@ -94,6 +125,16 @@ def game_loop():
 
         gameDisplay.fill(white)
 
+        def button(msg, x, y, w, h, ic, ac):
+            mouse = pygame.mouse.get_pos()
+            click = pygame.mouse.get_pressed()
+            print(click)
+
+        if x + w > mouse[0] > x and y + h > mouse[1] > y:
+            pygame.draw.rect(gameDisplay, ac, (x, y, w, h))
+        else:
+            pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
+
         ##########
         # things(thingx, thingy, thingw, thingh, color)
         things(thing_startx, thing_starty, thing_width, thing_height, black)
@@ -128,6 +169,8 @@ def game_loop():
         clock.tick(60)
 
 
+
+game_intro()
 game_loop()
 pygame.quit()
 quit()
